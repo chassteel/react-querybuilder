@@ -83,7 +83,13 @@ const controlElements: { [k in StyleName]: Partial<Controls> } = {
 const preparedFields: { [key: string]: Field[] } = {
   primary: [
     { name: 'firstName', label: 'First Name', placeholder: 'Enter first name' },
-    { name: 'lastName', label: 'Last Name', placeholder: 'Enter last name' }
+    { name: 'lastName', label: 'Last Name', placeholder: 'Enter last name' },
+    {
+      name: 'dob',
+      label: 'Birthday',
+      placeholder: ['PL1', 'PL2'],
+      inputType: 'date'
+    }
   ],
   secondary: [
     { name: 'age', label: 'Age', inputType: 'number' },
@@ -135,7 +141,7 @@ const preparedQueries: { [key: string]: RuleGroupType } = {
       {
         id: `r-${generateID()}`,
         field: 'firstName',
-        value: 'Steve',
+        value: '',
         operator: '='
       },
       {
@@ -143,6 +149,12 @@ const preparedQueries: { [key: string]: RuleGroupType } = {
         field: 'lastName',
         value: 'Vai',
         operator: '='
+      },
+      {
+        id: `r-${generateID()}`,
+        field: 'dob',
+        value: ['', ''],
+        operator: 'between'
       }
     ],
     combinator: 'and',

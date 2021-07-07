@@ -52,6 +52,8 @@ export const defaultValueProcessor: ValueProcessor = (
     val = `'%${value}'`;
   } else if (typeof value === 'boolean') {
     val = `${value}`.toUpperCase();
+  } else if (operator.toLowerCase() === 'between') {
+    return (value.length ? value : []).map((item: string) => `'${item}'`);
   }
   return val;
 };
@@ -90,6 +92,14 @@ const formatQuery = (ruleGroup: RuleGroupType, options?: FormatQueryOptions | Ex
     const processRule = (rule: RuleType) => {
       const value = valueProcessor(rule.field, rule.operator, rule.value);
       const operator = mapOperator(rule.operator);
+
+      if (operator.toLowerCase() === 'between') {
+        Array.from(value).forEach((v) => params.push(v.match(/^'?(.*?)'?$/)![1]));
+
+        return `${quoteFieldNamesWith}${rule.field}${quoteFieldNamesWith} ${operator} ${
+          parameterized ? '?' : value[0]
+        } and ${parameterized ? '?' : value[1]}`;
+      }
 
       if (parameterized && value) {
         if (operator.toLowerCase() === 'in' || operator.toLowerCase() === 'not in') {

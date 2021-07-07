@@ -14,7 +14,47 @@ const ValueEditor = ({
   if (operator === 'null' || operator === 'notNull') {
     return null;
   }
-  const placeHolderText = (fieldData && fieldData.placeholder) || '';
+  let placeHolderText = (fieldData && fieldData.placeholder) || '';
+
+  const renderInput = () => {
+    placeHolderText = Array.isArray(placeHolderText) ? placeHolderText : [placeHolderText];
+
+    if (operator === 'between') {
+      return (
+        <div style={{ display: 'inline-block' }}>
+          <input
+            type={inputType || 'text'}
+            placeholder={placeHolderText[0]}
+            value={value[0]}
+            title={title}
+            className={className}
+            onChange={(e) => handleOnChange([e.target.value, value[1] || ''])}
+          />
+
+          <input
+            type={inputType || 'text'}
+            placeholder={placeHolderText[1]}
+            value={value[1]}
+            title={title}
+            className={className}
+            onChange={(e) => handleOnChange([value[0] || '', e.target.value])}
+          />
+        </div>
+      );
+    }
+
+    return (
+      <input
+        type={inputType || 'text'}
+        placeholder={placeHolderText[0]}
+        value={value}
+        title={title}
+        className={className}
+        onChange={(e) => handleOnChange(e.target.value)}
+      />
+    );
+  };
+
   switch (type) {
     case 'select':
       return (
@@ -62,16 +102,7 @@ const ValueEditor = ({
       );
 
     default:
-      return (
-        <input
-          type={inputType || 'text'}
-          placeholder={placeHolderText}
-          value={value}
-          title={title}
-          className={className}
-          onChange={(e) => handleOnChange(e.target.value)}
-        />
-      );
+      return renderInput();
   }
 };
 

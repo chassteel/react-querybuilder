@@ -13,7 +13,7 @@ export interface Field extends NameLabelPair {
   values?: NameLabelPair[];
   defaultValue?: any;
   [x: string]: any;
-  placeholder?: string;
+  placeholder?: string | string[];
 }
 
 export interface RuleType {

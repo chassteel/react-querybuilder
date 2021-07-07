@@ -69,7 +69,8 @@ export const defaultOperators: NameLabelPair[] = [
   { name: 'null', label: 'is null' },
   { name: 'notNull', label: 'is not null' },
   { name: 'in', label: 'in' },
-  { name: 'notIn', label: 'not in' }
+  { name: 'notIn', label: 'not in' },
+  { name: 'between', label: 'between' }
 ];
 
 export const defaultCombinators: NameLabelPair[] = [
@@ -246,6 +247,10 @@ export const QueryBuilder = ({
 
       if (editorType === 'checkbox') {
         value = false;
+      }
+
+      if (rule.operator.toLowerCase() === 'between') {
+        value = ['', ''];
       }
     }
 
