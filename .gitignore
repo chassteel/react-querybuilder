@@ -4,5 +4,4 @@ node_modules
 .tmp
 coverage
 /.DS_Store
-dist
 types
