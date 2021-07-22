@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { ValueEditorProps } from '../types';
 
 const ValueEditor = ({
@@ -16,6 +18,12 @@ const ValueEditor = ({
   }
   let placeHolderText = (fieldData && fieldData.placeholder) || '';
 
+  useEffect(() => {
+    if (operator === 'between' && !Array.isArray(value)) {
+      handleOnChange(['', '']);
+    }
+  }, [operator, value]);
+
   const renderInput = () => {
     placeHolderText = Array.isArray(placeHolderText) ? placeHolderText : [placeHolderText];
 
@@ -25,7 +33,7 @@ const ValueEditor = ({
           <input
             type={inputType || 'text'}
             placeholder={placeHolderText[0]}
-            value={value[0]}
+            value={value ? value[0] : ''}
             title={title}
             className={className}
             onChange={(e) => handleOnChange([e.target.value, value[1] || ''])}
@@ -34,7 +42,7 @@ const ValueEditor = ({
           <input
             type={inputType || 'text'}
             placeholder={placeHolderText[1]}
-            value={value[1]}
+            value={value ? value[1] : ''}
             title={title}
             className={className}
             onChange={(e) => handleOnChange([value[0] || '', e.target.value])}
