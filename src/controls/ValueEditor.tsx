@@ -13,13 +13,13 @@ const ValueEditor = ({
   values,
   fieldData
 }: ValueEditorProps) => {
-  if (operator === 'null' || operator === 'notNull') {
+  if (['null', 'notNull', 'empty', 'notEmpty'].includes(operator)) {
     return null;
   }
   let placeHolderText = (fieldData && fieldData.placeholder) || '';
 
   useEffect(() => {
-    if (operator === 'between' && !Array.isArray(value)) {
+    if (['between', 'not between'].includes(operator) && !Array.isArray(value)) {
       handleOnChange(['', '']);
     }
   }, [operator, value]);
@@ -27,7 +27,7 @@ const ValueEditor = ({
   const renderInput = () => {
     placeHolderText = Array.isArray(placeHolderText) ? placeHolderText : [placeHolderText];
 
-    if (operator === 'between') {
+    if (['between', 'not between'].includes(operator)) {
       return (
         <div style={{ display: 'inline-block' }}>
           <input

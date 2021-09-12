@@ -70,7 +70,10 @@ export const defaultOperators: NameLabelPair[] = [
   { name: 'notNull', label: 'is not null' },
   { name: 'in', label: 'in' },
   { name: 'notIn', label: 'not in' },
-  { name: 'between', label: 'between' }
+  { name: 'between', label: 'between' },
+  { name: 'not between', label: 'not between' },
+  { name: 'empty', label: 'is empty' },
+  { name: 'notEmpty', label: 'is not empty' }
 ];
 
 export const defaultCombinators: NameLabelPair[] = [
@@ -249,7 +252,7 @@ export const QueryBuilder = ({
         value = false;
       }
 
-      if (rule.operator.toLowerCase() === 'between') {
+      if (['between', 'not between'].includes(rule.operator.toLowerCase())) {
         value = ['', ''];
       }
     }

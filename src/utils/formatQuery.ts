@@ -23,6 +23,10 @@ const mapOperator = (op: string) => {
     case 'doesnotbeginwith':
     case 'doesnotendwith':
       return 'not like';
+    case 'empty':
+      return '=';
+    case 'notempty':
+      return '!=';
     default:
       return op;
   }
@@ -36,6 +40,8 @@ export const defaultValueProcessor: ValueProcessor = (
   let val = `'${value}'`;
   if (operator.toLowerCase() === 'null' || operator.toLowerCase() === 'notnull') {
     val = '';
+  } else if (['empty', 'notempty'].includes(operator.toLowerCase())) {
+    val = `''`;
   } else if (operator.toLowerCase() === 'in' || operator.toLowerCase() === 'notin') {
     val = `(${value
       .split(',')
@@ -52,7 +58,7 @@ export const defaultValueProcessor: ValueProcessor = (
     val = `'%${value}'`;
   } else if (typeof value === 'boolean') {
     val = `${value}`.toUpperCase();
-  } else if (operator.toLowerCase() === 'between') {
+  } else if (['between', 'not between'].includes(operator.toLowerCase())) {
     return (value.length ? value : []).map((item: string) => `'${item}'`);
   }
   return val;
@@ -93,7 +99,7 @@ const formatQuery = (ruleGroup: RuleGroupType, options?: FormatQueryOptions | Ex
       const value = valueProcessor(rule.field, rule.operator, rule.value);
       const operator = mapOperator(rule.operator);
 
-      if (operator.toLowerCase() === 'between') {
+      if (['between', 'not between'].includes(operator.toLowerCase())) {
         Array.from(value).forEach((v) => params.push(v.match(/^'?(.*?)'?$/)![1]));
 
         return `${quoteFieldNamesWith}${rule.field}${quoteFieldNamesWith} ${operator} ${
